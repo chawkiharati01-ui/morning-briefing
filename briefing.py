@@ -24,53 +24,55 @@ Today is {today} — use this exact date everywhere.
 
 Deliver a beautiful, data-rich, perfectly balanced briefing in **HTML** (Gmail-ready with bold, colors, spacing, tables, emojis).
 
-Structure — exactly in this order, always the same number of items in each section:
+Structure — exactly in this order, always the same number of items:
 
 ────────────────────────
 OVERNIGHT SUMMARY (1 sentence in bold green)
 ────────────────────────
-One sharp TL;DR of global risk tone and the dominant driver.
+One razor-sharp TL;DR of global risk tone and the dominant driver.
 
 ────────────────────────
 MARKETS & FINANCE (exactly 5 stories)
 ────────────────────────
-Give exactly 5 of the most important market/finance stories of the last 24 hours.
-For each:
-• Strong headline in bold
-• 3–5 sentences of dense, neutral explanation with exact numbers/quotes
-• When relevant, insert a clean HTML table with current levels + 24h change for: S&P 500, Nasdaq 100, Eurostoxx 50, DAX, Nikkei, Gold, Brent, US 10-yr, Bund 10-yr, VIX, DXY, BTC/USD
+Exactly 5 of the most important market/finance stories of the last 24 hours.
+Bold headline + 3–5 dense sentences + exact numbers.
+Insert HTML price table when relevant (S&P 500, Nasdaq 100, Eurostoxx 50, DAX, Nikkei, Gold, Brent, US 10-yr, Bund 10-yr, VIX, DXY, BTC/USD).
 
 ────────────────────────
 TECH INDUSTRY & MEGACAPS (exactly 5 stories)
 ────────────────────────
-Give exactly 5 of the most important tech-sector / megacap / AI / semiconductor stories.
-Same format: bold headline + 3–5 sentences + key numbers (revenue moves, capex announcements, regulatory filings, options flow, etc.)
+Exactly 5 of the most important tech-sector / megacap / AI / semiconductor stories.
+Same format + key numbers (earnings, capex, regulatory, options flow, etc.).
 
 ────────────────────────
 GEOPOLITICS & POLICY (exactly 5 stories)
 ────────────────────────
-Give exactly 5 of the most market-relevant geopolitical, central-bank, regulatory or trade stories.
-Same format: bold headline + 3–5 sentences + quotes or hard numbers.
-Add bias distribution only when coverage clearly diverges.
+Exactly 5 of the most market-relevant geopolitical, central-bank, regulatory or trade stories.
+Same format + quotes/numbers. Bias line only when coverage clearly diverges.
 
 ────────────────────────
 RATES & FX PRICING SNAPSHOT
 ────────────────────────
-One compact HTML table with:
+Compact HTML table with:
 • Fed Funds (Dec25, Mar26, Jun26) – CME FedWatch %
 • ECB Deposit rate expectations (same dates)
 • 2y/10y US Treasury spread
 • Key FX pairs (EURUSD, USDJPY, GBPUSD, USDCNH) spot + 24h change
 
+────────────────────────
+WHAT TO WATCH TOMORROW – MARKETS & DATA
+────────────────────────
+Bullet list of the 4–6 most important economic releases, earnings, or market events for the next 24–48h (include time zone = Paris).
+
+────────────────────────
+WHAT TO WATCH TOMORROW – GEOPOLITICS & POLICY
+────────────────────────
+Bullet list of the 4–6 most important geopolitical meetings, speeches, deadlines, or risk events for the next 24–48h.
+
 End with this exact line in bold red:
 **What actually matters today:** [one single, razor-sharp sentence summarising the dominant risk or trade of the day]
 
-Rules:
-- Sources only: Bloomberg, Reuters, FT, WSJ, Fed/ECB/BOJ statements, exchange data, SEC/EMA filings.
-- Never moralise, speculate or use emotional language.
-- Use bold, italics, colors, emojis, spacing and HTML tables aggressively — make it gorgeous and instantly scannable.
-- Depth is required — this is for a professional AM desk.
-- Never truncate — you have plenty of tokens.
+Rules: Bloomberg/Reuters/FT/WSJ/ECB-Fed-BOJ/SEC level sourcing only. Depth required. Never truncate. Use HTML aggressively for beauty.
 
 Start now."""
 
