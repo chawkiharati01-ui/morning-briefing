@@ -18,35 +18,59 @@ client = openai.OpenAI(
 
 # The perfect prompt we built together
 today = datetime.now().strftime("%B %d, %Y")  # e.g., "November 26, 2025"
-PROMPT = f"""You are the world's best macro analyst writing my private morning briefing. Today is {today} — use this exact date everywhere.
+PROMPT = f"""You are the best macro + tech analyst on the planet writing my private morning briefing for an asset-management firm.
 
-Deliver a clean, beautiful, highly readable daily briefing in **HTML** (so it renders perfectly in Gmail with bold, colors, spacing, tables, emojis).
+Today is {today} — use this exact date everywhere.
 
-Strictly separate into two main sections:
+Deliver a beautiful, data-rich, perfectly balanced briefing in **HTML** (Gmail-ready with bold, colors, spacing, tables, emojis).
 
-────────────────────────
-MARKETS & FINANCE
-────────────────────────
-→ Start with a one-line TL;DR of the overnight price action.
-→ Then 3–5 of the most important market/finance stories of the last 24 hours.
-→ For each story: one strong headline + 2–3 sentences of neutral, fact-dense explanation + exact numbers.
-→ When relevant, insert a clean HTML table with current levels and 24h change for: S&P 500, Nasdaq 100, Eurostoxx 50, DAX, Nikkei, Gold, WTI/Brent, US 10-yr yield, German 10-yr, VIX, DXY, BTC.
+Structure — exactly in this order, always the same number of items in each section:
 
 ────────────────────────
-GEOPOLITICS & POLICY
+OVERNIGHT SUMMARY (1 sentence in bold green)
 ────────────────────────
-→ 3–5 of the most market-relevant geopolitical / central-bank / regulatory stories.
-→ Same format: strong headline + 2–3 sentences + key quotes or numbers.
-→ Bias distribution line only when coverage clearly diverges.
+One sharp TL;DR of global risk tone and the dominant driver.
 
-End the entire briefing with this exact final line in bold red:
-**What actually matters today:** [one single, sharp sentence summarising the dominant risk/theme of the day]
+────────────────────────
+MARKETS & FINANCE (exactly 5 stories)
+────────────────────────
+Give exactly 5 of the most important market/finance stories of the last 24 hours.
+For each:
+• Strong headline in bold
+• 3–5 sentences of dense, neutral explanation with exact numbers/quotes
+• When relevant, insert a clean HTML table with current levels + 24h change for: S&P 500, Nasdaq 100, Eurostoxx 50, DAX, Nikkei, Gold, Brent, US 10-yr, Bund 10-yr, VIX, DXY, BTC/USD
+
+────────────────────────
+TECH INDUSTRY & MEGACAPS (exactly 5 stories)
+────────────────────────
+Give exactly 5 of the most important tech-sector / megacap / AI / semiconductor stories.
+Same format: bold headline + 3–5 sentences + key numbers (revenue moves, capex announcements, regulatory filings, options flow, etc.)
+
+────────────────────────
+GEOPOLITICS & POLICY (exactly 5 stories)
+────────────────────────
+Give exactly 5 of the most market-relevant geopolitical, central-bank, regulatory or trade stories.
+Same format: bold headline + 3–5 sentences + quotes or hard numbers.
+Add bias distribution only when coverage clearly diverges.
+
+────────────────────────
+RATES & FX PRICING SNAPSHOT
+────────────────────────
+One compact HTML table with:
+• Fed Funds (Dec25, Mar26, Jun26) – CME FedWatch %
+• ECB Deposit rate expectations (same dates)
+• 2y/10y US Treasury spread
+• Key FX pairs (EURUSD, USDJPY, GBPUSD, USDCNH) spot + 24h change
+
+End with this exact line in bold red:
+**What actually matters today:** [one single, razor-sharp sentence summarising the dominant risk or trade of the day]
 
 Rules:
-- Use real sources only (Bloomberg, Reuters, FT, WSJ, ECB/Fed statements, exchange data).
-- Never moralise, never speculate, never use emotional language.
-- Use bold, italics, emojis, spacing and HTML tables liberally to make it beautiful and scannable.
-- Maximum total length: whatever is needed — this is for a professional, depth is welcome.
+- Sources only: Bloomberg, Reuters, FT, WSJ, Fed/ECB/BOJ statements, exchange data, SEC/EMA filings.
+- Never moralise, speculate or use emotional language.
+- Use bold, italics, colors, emojis, spacing and HTML tables aggressively — make it gorgeous and instantly scannable.
+- Depth is required — this is for a professional AM desk.
+- Never truncate — you have plenty of tokens.
 
 Start now."""
 
@@ -54,11 +78,12 @@ def generate_briefing():
     response = client.chat.completions.create(
         model="grok-4",
         messages=[
-            {"role": "system", "content": "You are an impartial senior analyst. Never moralize, speculate, or use emotional language."},
+            {"role": "system", "content": "You are a world-class macro and tech analyst. Always complete the full briefing."},
             {"role": "user", "content": PROMPT}
         ],
-        temperature=0.2,
-        max_tokens=1400
+        temperature=0.25,
+        max_tokens=4000,          # ← guarantees completion
+        timeout=120
     )
     return response.choices[0].message.content
 
