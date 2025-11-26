@@ -8,7 +8,7 @@ import openai  # For Grok API (OpenAI-compatible)
 GROK_API_KEY = "xai-thvtrBeBMMTbJqjZ4n2GOsETavsZmJyJn43XBnFeh01TxVAZFGKCrv1AVjeGL17SYebVfhG9X8m6DNP9"  # Get from https://console.x.ai/api-keys
 EMAIL_TO = "chawki.harati01@gmail.com"      # Where to send the briefing
 EMAIL_FROM = "chawki.harati01@gmail.com"    # Your sending email (same as TO if testing)
-SMTP_PASSWORD = "ygsl timj axcl flhz"      # Gmail app password (see Step 2 below)
+SMTP_PASSWORD = "ygsltimjaxclflhz"      # Gmail app password (see Step 2 below)
 
 # Set up OpenAI client for Grok API
 client = openai.OpenAI(
