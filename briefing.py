@@ -18,31 +18,37 @@ client = openai.OpenAI(
 
 # The perfect prompt we built together
 today = datetime.now().strftime("%B %d, %Y")  # e.g., "November 26, 2025"
-PROMPT = f"""You are an impartial senior analyst. Today is {today} (use this exact date everywhere).
+PROMPT = f"""You are the world's best macro analyst writing my private morning briefing. Today is {today} — use this exact date everywhere.
 
-Deliver a strict Ground News-style daily briefing covering ONLY financial markets and geopolitics from the last 24 hours.
+Deliver a clean, beautiful, highly readable daily briefing in **HTML** (so it renders perfectly in Gmail with bold, colors, spacing, tables, emojis).
 
-Sources priority: Bloomberg, Reuters, FT, WSJ, AP, AFP, official statements, exchange filings. Never use Wikipedia, X threads, or opinion pieces as facts.
+Strictly separate into two main sections:
 
-For each major story:
-• One completely neutral single-sentence summary
-• Today’s bias distribution (e.g. “Covered by 34 left, 19 center, 28 right-leaning outlets” or “Right-leaning blindspot”)
-• Only verifiable facts (prices, %, quotes, data)
-• One example source from L|C|R only when coverage diverges
+────────────────────────
+MARKETS & FINANCE
+────────────────────────
+→ Start with a one-line TL;DR of the overnight price action.
+→ Then 3–5 of the most important market/finance stories of the last 24 hours.
+→ For each story: one strong headline + 2–3 sentences of neutral, fact-dense explanation + exact numbers.
+→ When relevant, insert a clean HTML table with current levels and 24h change for: S&P 500, Nasdaq 100, Eurostoxx 50, DAX, Nikkei, Gold, WTI/Brent, US 10-yr yield, German 10-yr, VIX, DXY, BTC.
 
-End with exactly these two sections:
-• What the market is currently pricing in (CME FedWatch, yields, VIX, FX, etc.)
-• What to watch tomorrow (events & times)
+────────────────────────
+GEOPOLITICS & POLICY
+────────────────────────
+→ 3–5 of the most market-relevant geopolitical / central-bank / regulatory stories.
+→ Same format: strong headline + 2–3 sentences + key quotes or numbers.
+→ Bias distribution line only when coverage clearly diverges.
 
-Structure in clean markdown. Maximum 600 words total.
+End the entire briefing with this exact final line in bold red:
+**What actually matters today:** [one single, sharp sentence summarising the dominant risk/theme of the day]
 
-**Top Stories – {today}**
+Rules:
+- Use real sources only (Bloomberg, Reuters, FT, WSJ, ECB/Fed statements, exchange data).
+- Never moralise, never speculate, never use emotional language.
+- Use bold, italics, emojis, spacing and HTML tables liberally to make it beautiful and scannable.
+- Maximum total length: whatever is needed — this is for a professional, depth is welcome.
 
-1. …
-
-**What the market is currently pricing in**
-
-**What to watch tomorrow**"""
+Start now."""
 
 def generate_briefing():
     response = client.chat.completions.create(
@@ -58,24 +64,19 @@ def generate_briefing():
 
 def send_email(briefing):
     try:
-        msg = MIMEText(briefing, 'plain')
-        msg['Subject'] = f"Daily Markets & Geopolitics Briefing – {today}"
+        msg = MIMEText(briefing, 'html')   # ← changed from 'plain' to 'html'
+        msg['Subject'] = f"Macro Briefing – {today}"
         msg['From'] = EMAIL_FROM
         msg['To'] = EMAIL_TO
 
-        # Gmail SMTP
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(EMAIL_FROM, SMTP_PASSWORD)
         server.send_message(msg)
         server.quit()
-        print("✅ Email sent successfully to", EMAIL_TO)
-    except smtplib.SMTPAuthenticationError as e:
-        print(f"❌ SMTP Auth Error: {e}. Check App Password and 2FA.")
-    except smtplib.SMTPException as e:
-        print(f"❌ SMTP Error: {e}")
+        print("HTML briefing sent successfully!")
     except Exception as e:
-        print(f"❌ Unexpected Error: {e}")
+        print(f"Email failed: {e}")
 
 # Run it
 if __name__ == "__main__":
