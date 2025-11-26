@@ -1,0 +1,25 @@
+name: Daily Briefing
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 7am Paris = 6am UTC (adjust if DST)
+  workflow_dispatch:  # Allows manual test
+
+jobs:
+  send-briefing:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      run: pip install openai
+    - name: Run script
+      env:
+        GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
+        EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      run: python briefing.py
