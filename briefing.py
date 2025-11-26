@@ -57,18 +57,25 @@ def generate_briefing():
     return response.choices[0].message.content
 
 def send_email(briefing):
-    msg = MIMEText(briefing, 'plain')
-    msg['Subject'] = f"Daily Markets & Geopolitics Briefing – {today}"
-    msg['From'] = EMAIL_FROM
-    msg['To'] = EMAIL_TO
+    try:
+        msg = MIMEText(briefing, 'plain')
+        msg['Subject'] = f"Daily Markets & Geopolitics Briefing – {today}"
+        msg['From'] = EMAIL_FROM
+        msg['To'] = EMAIL_TO
 
-    # Gmail SMTP (change server/port if using Outlook/etc.)
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(EMAIL_FROM, SMTP_PASSWORD)
-    server.send_message(msg)
-    server.quit()
-    print("Briefing sent successfully!")
+        # Gmail SMTP
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(EMAIL_FROM, SMTP_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        print("✅ Email sent successfully to", EMAIL_TO)
+    except smtplib.SMTPAuthenticationError as e:
+        print(f"❌ SMTP Auth Error: {e}. Check App Password and 2FA.")
+    except smtplib.SMTPException as e:
+        print(f"❌ SMTP Error: {e}")
+    except Exception as e:
+        print(f"❌ Unexpected Error: {e}")
 
 # Run it
 if __name__ == "__main__":
