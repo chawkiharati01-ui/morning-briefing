@@ -3,6 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import datetime
 import openai  # For Grok API (OpenAI-compatible)
+import time
 
 # === CONFIGURE THESE 4 LINES ONLY (DO NOT PUT REAL KEYS HERE) ===
 GROK_API_KEY = os.getenv("GROK_API_KEY")          # Comes from GitHub Secrets
@@ -77,17 +78,28 @@ Rules: Bloomberg/Reuters/FT/WSJ/ECB-Fed-BOJ/SEC level sourcing only. Depth requi
 Start now."""
 
 def generate_briefing():
-    response = client.chat.completions.create(
-        model="grok-4",
-        messages=[
-            {"role": "system", "content": "You are a world-class macro and tech analyst. Always complete the full briefing."},
-            {"role": "user", "content": PROMPT}
-        ],
-        temperature=0.25,
-        max_tokens=4000,          # ← guarantees completion
-        timeout=120
-    )
-    return response.choices[0].message.content
+    for attempt in range(3):  # 3 tentatives max
+        try:
+            response = client.chat.completions.create(
+                model="grok-4",
+                messages=[
+                    {"role": "system", "content": "You are a world-class macro and tech analyst. Always complete the full briefing."},
+                    {"role": "user", "content": PROMPT}
+                ],
+                temperature=0.25,
+                max_tokens=6000,
+                timeout=300
+            )
+            return response.choices[0].message.content
+            
+        except openai.APITimeoutError:
+            print(f"Timeout attempt {attempt+1}/3 – retrying in 10s...")
+            time.sleep(10)
+        except Exception as e:
+            print(f"Error: {e}")
+            time.sleep(10)
+    
+    raise Exception("Failed after 3 attempts")
 
 def send_email(briefing):
     try:
